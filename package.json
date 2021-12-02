@@ -1,0 +1,24 @@
+{
+  "name": "fastify-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node build/dev.js",
+    "build": "node build/index.js",
+    "build:pkg": "node build/index.js && pkg dist/app.js -c build/pkg.json"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.110",
+    "copy-webpack-plugin": "^10.0.0",
+    "prettier": "^2.4.1",
+    "swc-loader": "^0.1.15",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.1"
+  },
+  "dependencies": {
+    "fastify": "^3.24.0",
+    "node-schedule": "^2.1.0",
+    "socket.io": "^4.4.0"
+  }
+}
