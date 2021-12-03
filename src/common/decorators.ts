@@ -1,4 +1,4 @@
-import type { RouteOptions } from 'fastify';
+import type { RouteShorthandOptions } from 'fastify';
 
 /**
  * Standard HTTP method strings
@@ -8,7 +8,10 @@ export type HTTPMethods = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT' |
 /**
  * 注册结构
  */
-export interface Route extends RouteOptions {
+export interface Route extends RouteShorthandOptions {
+  method?: HTTPMethods | HTTPMethods[];
+  url?: string;
+  handler?: Function;
   constructor?: any;
 }
 
@@ -31,18 +34,13 @@ export function Controller(path: string = '') {
  * 给controller类的方法添加装饰
  * @param params Controllers
  */
-export function RequestMapping(
-  url: string,
-  method?: HTTPMethods | HTTPMethods[],
-  preHandler?: any[]
-) {
+export function RequestMapping(route: Route = {}) {
   return function (target: any, name: string) {
-    routes.push({
-      url: url || `/${name.toLocaleLowerCase()}`,
-      method: method || 'GET',
-      preHandler: preHandler || [],
-      handler: target[name],
-      constructor: target.constructor
-    });
+    route.url = route.url || `/${name.toLocaleLowerCase()}`;
+    route.method = route.method || 'GET';
+    route.preHandler = route.preHandler || [];
+    route.handler = target[name];
+    route.constructor = target.constructor;
+    routes.push(route);
   };
 }

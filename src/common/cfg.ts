@@ -37,7 +37,7 @@ export class Cfg {
       const cfg = (await readFile(path, opt || { encoding: 'utf-8' })) as any;
       if (cfg) this.set(seat, parse ? JSON.parse(cfg) : cfg);
     } catch (e) {
-      Log(e);
+      Log.error(e);
     }
   }
 

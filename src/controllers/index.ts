@@ -7,7 +7,7 @@ const indexServer = new IndexServer();
 
 @Controller('')
 class Index {
-  @RequestMapping('/')
+  @RequestMapping({ url: '/' })
   async index(request: FastifyRequest, reply: FastifyReply) {
     request.log.info('Some info about the current request');
     indexServer.test();
