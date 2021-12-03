@@ -1,12 +1,10 @@
-import type {
-  FastifyServerOptions,
-  FastifyPluginOptions,
-  FastifyInstance,
-  FastifyRequest
-} from 'fastify';
+import type { FastifyServerOptions, FastifyInstance, FastifyRequest } from 'fastify';
+import { join } from 'path';
 import Fastify from 'fastify';
 import Cors from 'fastify-cors';
+import Static from 'fastify-static';
 import Router from '@/common/router';
+import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
 import { loggerWrite } from '@/common/log';
 
@@ -73,17 +71,23 @@ class App {
     return this;
   }
 
-  router() {
-    Router(this.fastify);
+  static() {
+    this.fastify.register(Static, {
+      root: join(__dirname, 'resources/static'),
+      prefix: '/static/'
+    });
     return this;
   }
 
-  register(
-    fq: (fastify: FastifyInstance, opts: FastifyPluginOptions, done: (err?: Error) => void) => void
-  ) {
+  socketIo() {
     // https://www.fastify.cn/docs/latest/Plugins/
-    fq[Symbol.for('skip-override')] = true;
-    this.fastify.register(fq);
+    SocketIo[Symbol.for('skip-override')] = true;
+    this.fastify.register(SocketIo);
+    return this;
+  }
+
+  router() {
+    Router(this.fastify);
     return this;
   }
 
