@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyInstance, RouteOptions } from 'fastify';
 import { routes } from '@/common/decorators';
 
 export * from '@/router';
@@ -12,6 +12,6 @@ export default (fastify: FastifyInstance) => {
     const prefix = route.constructor.prefix;
     if (prefix) route.url = `${prefix}${route.url}`;
     console.log(`[route|${route.method}]`, route.url);
-    fastify.route(route);
+    fastify.route(route as RouteOptions);
   });
 };
