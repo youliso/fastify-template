@@ -4,6 +4,17 @@ import { resolve, extname, isAbsolute } from 'path';
 import { isNull } from '@/utils';
 
 /**
+ * 日志处理
+ * @param path
+ * @param suffix
+ * @returns
+ */
+
+export function loggerWrite(msg: string) {
+  // console.log(msg);
+}
+
+/**
  * 读取目录下指定后缀文件
  * @param path
  * @param suffix

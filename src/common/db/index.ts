@@ -1,15 +1,11 @@
 import Cfg from '@/common/cfg';
 import { MysqlDb } from './mysqldb';
-import { RedisDb } from './redisdb';
-// import {MongoDb} from "./mongodb";
 
 const dbConfig = Cfg.get<{ [key: string]: any }>('db');
 
 class Db {
   private static instance: Db;
   public mysqlDb: { [key: string]: MysqlDb } = {};
-  public redisDb: { [key: string]: RedisDb } = {};
-  // public mongoDb: { [key: string]: MongoDb } = {};
 
   static getInstance() {
     if (!Db.instance) Db.instance = new Db();
@@ -23,12 +19,6 @@ class Db {
           case 'mysql':
             this.mysqlDb[i] = new MysqlDb(dbConfig[i].data);
             break;
-          case 'redis':
-            this.redisDb[i] = new RedisDb(dbConfig[i].data);
-            break;
-          // case 'mongo':
-          //     this.mongoDb[i] = new MongoDb(dbConfig[i].data);
-          //     break;
         }
     }
   }

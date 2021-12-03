@@ -6,7 +6,7 @@ import Static from 'fastify-static';
 import Router from '@/common/router';
 import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
-import { loggerWrite } from '@/common/log';
+import { loggerWrite } from '@/common/file';
 
 class App {
   private static instance: App;
@@ -43,6 +43,10 @@ class App {
       })
     );
     return this;
+  }
+
+  log() {
+    return this.fastify.log;
   }
 
   cors() {

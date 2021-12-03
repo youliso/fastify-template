@@ -2,6 +2,6 @@ import App from '@/common/app';
 
 export default class IndexServer {
   test() {
-    App.fastify.log.info('123');
+    App.log().info('123');
   }
 }
