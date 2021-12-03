@@ -2,8 +2,8 @@
   "port": 7777,
   "domainWhite": "*",
   "cors": {
-    "allowMethods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    "allowHeaders": ["Content-Type", "Authorization"],
-    "exposeHeaders": ["Content-Type", "Authorization"]
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allowedHeaders": ["Content-Type", "Authorization"],
+    "exposedHeaders": ["Content-Type", "Authorization"]
   }
 }

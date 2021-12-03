@@ -5,7 +5,9 @@ import type {
   FastifyRequest
 } from 'fastify';
 import Fastify from 'fastify';
+import Cors from 'fastify-cors';
 import Router from '@/common/router';
+import Cfg from '@/common/cfg';
 import { loggerWrite } from '@/common/log';
 
 class App {
@@ -42,6 +44,32 @@ class App {
         }
       })
     );
+    return this;
+  }
+
+  cors() {
+    const corsOpt = Cfg.get<{ [key: string]: any }>('index.cors');
+    const domainWhite = Cfg.get<string[]>('index.domainWhite');
+    this.fastify.register(Cors, {
+      origin: (origin, cb) => {
+        if (typeof domainWhite === 'string') {
+          if (domainWhite === '*' || domainWhite === origin) {
+            cb(null, true);
+            return;
+          }
+          cb(new Error('Not allowed'), false);
+          return;
+        }
+        if (domainWhite[domainWhite.indexOf(origin)]) {
+          cb(null, true);
+          return;
+        }
+        cb(new Error('Not allowed'), false);
+      },
+      methods: corsOpt.methods,
+      allowedHeaders: corsOpt.allowedHeaders,
+      exposedHeaders: corsOpt.exposedHeaders
+    });
     return this;
   }
 
