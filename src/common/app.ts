@@ -42,10 +42,12 @@ class App {
         }
       })
     );
+    return this;
   }
 
   router() {
     Router(this.fastify);
+    return this;
   }
 
   register(
@@ -54,6 +56,7 @@ class App {
     // https://www.fastify.cn/docs/latest/Plugins/
     fq[Symbol.for('skip-override')] = true;
     this.fastify.register(fq);
+    return this;
   }
 
   listen(port: number) {

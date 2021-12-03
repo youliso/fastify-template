@@ -3,7 +3,4 @@ import Socket from '@/common/socket';
 import { cfgInit } from '@/cfg';
 
 await cfgInit();
-App.init();
-App.router();
-App.register(Socket);
-App.listen(3000);
+App.init().router().register(Socket).listen(3000);
