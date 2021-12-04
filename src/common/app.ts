@@ -1,5 +1,5 @@
 import type { FastifyServerOptions, FastifyInstance, FastifyRequest } from 'fastify';
-import { join } from 'path';
+import { resolve } from 'path';
 import Fastify from 'fastify';
 import Cors from 'fastify-cors';
 import Static from 'fastify-static';
@@ -77,7 +77,7 @@ class App {
 
   static() {
     this.fastify.register(Static, {
-      root: join(__dirname, 'resources/static'),
+      root: resolve('resources/static'),
       prefix: '/static/'
     });
     return this;

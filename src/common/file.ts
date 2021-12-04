@@ -1,17 +1,20 @@
 import fs, { MakeDirectoryOptions } from 'fs';
+import { EOL } from 'os';
 import { createInterface } from 'readline';
-import { resolve, extname, isAbsolute } from 'path';
-import { isNull } from '@/utils';
+import { join, resolve, extname, isAbsolute, sep } from 'path';
+import { isNull, dateFormat } from '@/utils';
 
 /**
  * 日志处理
- * @param path
- * @param suffix
- * @returns
  */
-
-export function loggerWrite(msg: string) {
-  // console.log(msg);
+export const logsPath = resolve('logs');
+export async function loggerInit() {
+  const isAccess = await access(logsPath);
+  if (!isAccess) await mkdir(logsPath);
+}
+export async function loggerWrite(msg: string) {
+  const path = logsPath + `${sep}${dateFormat('yyyy-MM-dd')}.log`;
+  fs.appendFile(path, `[${dateFormat('yy-MM-dd hh:mm:ss')}] ${msg}`, () => {});
 }
 
 /**
@@ -158,7 +161,7 @@ export function readLine(path: string, index?: number): Promise<string | any[]> 
  * @param options
  * @returns 0 失败 1成功
  */
-export async function mkdir(path: string, options: MakeDirectoryOptions) {
+export async function mkdir(path: string, options?: MakeDirectoryOptions) {
   if (!isAbsolute(path)) path = resolve(path);
   return new Promise((resolve) => {
     fs.mkdir(path, options || { recursive: true }, (err) => {
