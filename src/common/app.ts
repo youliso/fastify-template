@@ -95,12 +95,12 @@ class App {
     return this;
   }
 
-  listen(port: number) {
+  listen(port: number, address: string = '0.0.0.0') {
     if (!this.fastify) {
       console.error('fastify null');
       return;
     }
-    this.fastify.listen(port, (err, address) => {
+    this.fastify.listen(port, address, (err, address) => {
       if (err) throw err;
       console.log(`Server is now listening on ${address}`);
     });
