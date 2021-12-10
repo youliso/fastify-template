@@ -95,14 +95,15 @@ class App {
     return this;
   }
 
-  listen(port: number, address: string = '0.0.0.0') {
+  listen(port?: number, address: string = '0.0.0.0') {
     if (!this.fastify) {
       console.error('fastify null');
       return;
     }
+    port = port || Cfg.get<number>('index.port');
     this.fastify.listen(port, address, (err, address) => {
       if (err) throw err;
-      console.log(`Server is now listening on ${address}`);
+      console.log(`listening on ${port}`);
     });
   }
 }

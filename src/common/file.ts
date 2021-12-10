@@ -1,7 +1,6 @@
 import fs, { MakeDirectoryOptions } from 'fs';
-import { EOL } from 'os';
 import { createInterface } from 'readline';
-import { join, resolve, extname, isAbsolute, sep } from 'path';
+import { resolve, extname, isAbsolute, sep } from 'path';
 import { isNull, dateFormat } from '@/utils';
 
 /**
