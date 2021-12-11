@@ -1,10 +1,12 @@
-import type { ClientRequest, ClientRequestArgs, IncomingMessage } from 'http';
-
+import type { ClientRequest, ClientRequestArgs, IncomingMessage, OutgoingHttpHeaders } from 'http';
 import { request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
 import { queryParams } from '@/utils';
 import { basename, extname } from 'path';
 import { createReadStream, statSync } from 'fs';
+
+export type Response = IncomingMessage;
+export type HeadersInit = OutgoingHttpHeaders;
 
 export interface NetOpt extends ClientRequestArgs {
   // 是否stringify参数（非GET请求使用）
@@ -12,7 +14,7 @@ export interface NetOpt extends ClientRequestArgs {
   // 是否获取headers
   isHeaders?: boolean;
   onRequest?: (request: ClientRequest) => void;
-  headers?: { [key: string]: string };
+  headers?: HeadersInit;
   timeout?: number;
   data?: any;
   type?: 'TEXT' | 'JSON' | 'BUFFER';
@@ -63,7 +65,7 @@ function upload(url: string, sendData: ClientRequestArgs, params: NetOpt = {}) {
 
     let request: ClientRequest;
     if (url.startsWith('http://')) request = httpRequest(url, sendData, ing);
-    if (url.startsWith('https://')) request = httpsRequest(url, sendData, ing);
+    else request = httpsRequest(url, sendData, ing);
     for (const header in headers) request.setHeader(header, headers[header]);
     if (params.data) {
       for (const i in params.data) {
@@ -227,7 +229,7 @@ export default function request<T>(url: string, params: NetOpt = {}): Promise<T>
 
     let request: ClientRequest;
     if (url.startsWith('http://')) request = httpRequest(url, sendData, ing);
-    if (url.startsWith('https://')) request = httpsRequest(url, sendData, ing);
+    else request = httpsRequest(url, sendData, ing);
     request.on('destroyed', () => {
       reject(new Error('destroy'));
     });
@@ -235,6 +237,12 @@ export default function request<T>(url: string, params: NetOpt = {}): Promise<T>
       reject(err);
     });
     for (const header in headers) request.setHeader(header, headers[header]);
+    if (params.data && sendData.method !== 'GET') {
+      if (typeof params.data !== 'string') {
+        const data = params.isStringify ? queryParams(params.data) : JSON.stringify(params.data);
+        request.write(data);
+      } else request.write(params.data);
+    }
     request.end();
     if (params.onRequest) params.onRequest(request);
   });

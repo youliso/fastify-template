@@ -1,11 +1,11 @@
 import Cfg from '@/common/cfg';
-import { MysqlDb } from './mysqldb';
+import { Mysql } from './mysql';
 
 const dbConfig = Cfg.get<{ [key: string]: any }>('db');
 
 class Db {
   private static instance: Db;
-  public mysqlDb: { [key: string]: MysqlDb } = {};
+  public mysqlDb: { [key: string]: Mysql } = {};
 
   static getInstance() {
     if (!Db.instance) Db.instance = new Db();
@@ -17,7 +17,7 @@ class Db {
       if (dbConfig.hasOwnProperty(i))
         switch (dbConfig[i].type) {
           case 'mysql':
-            this.mysqlDb[i] = new MysqlDb(dbConfig[i].data);
+            this.mysqlDb[i] = new Mysql(dbConfig[i].data);
             break;
         }
     }

@@ -1,7 +1,7 @@
 import { Pool, createPool, escape } from 'mysql2/promise';
 import App from '@/common/app';
 
-export class MysqlDb {
+export class Mysql {
   dbClient: Pool;
 
   constructor(db: object) {

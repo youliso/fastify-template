@@ -32,6 +32,26 @@
   resolved "https://registry.nlark.com/@napi-rs/triples/download/@napi-rs/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
   integrity sha1-dtbQw/TRYBPGHkXfyl/x5sMa5Tw=
 
+"@node-redis/client@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/@node-redis/client/download/@node-redis/client-1.0.0.tgz#25f6773c3a6997367772dc4d0eacd6e954063490"
+  integrity sha512-DWDMeZELXG3rOGzCKfJEHCkCP6rgiA1H+oqj2N0NR4Q0fQUYMxTsyoqt80GpdYLilUW6zoCiQl9yL3vJhGhiCA==
+  dependencies:
+    cluster-key-slot "1.1.0"
+    generic-pool "3.8.2"
+    redis-parser "3.0.0"
+    yallist "4.0.0"
+
+"@node-redis/json@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/@node-redis/json/download/@node-redis/json-1.0.0.tgz#11ba5882ac1f3226a8042f5de318c94bad520802"
+  integrity sha512-6e4qjbHODfr/KFsHYvkbfNui/kedVz+cG7Hz8oNbZM3p68QLf3A8FjcPYzixBp/QbvPeOSLgj39DjVEqjKkqkw==
+
+"@node-redis/search@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/@node-redis/search/download/@node-redis/search-1.0.0.tgz#3926c5cb0276cfa2d0ed6a92fd654743ee4ef188"
+  integrity sha512-f0Cw83X5+bpDIDTNSpd3YA+ckV3kwSv/NfcKhHRPGDQXFqyMLO0Q+2t8EMQncvsMRWduURsR4nqMYGzXae1ZCA==
+
 "@node-rs/helper@^1.0.0":
   version "1.2.1"
   resolved "https://registry.nlark.com/@node-rs/helper/download/@node-rs/helper-1.2.1.tgz#e079b05f21ff4329d82c4e1f71c0290e4ecdc70c"
@@ -576,6 +596,11 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
+cluster-key-slot@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/cluster-key-slot/download/cluster-key-slot-1.1.0.tgz#30474b2a981fb12172695833052bc0d01336d10d"
+  integrity sha1-MEdLKpgfsSFyaVgzBSvA0BM20Q0=
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/code-point-at/download/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -1085,6 +1110,11 @@ generate-function@^2.3.1:
   integrity sha1-8GlhdpDBDIaOc7hGV0Z2T5fDR58=
   dependencies:
     is-property "^1.0.2"
+
+generic-pool@3.8.2:
+  version "3.8.2"
+  resolved "https://registry.nlark.com/generic-pool/download/generic-pool-3.8.2.tgz#aab4f280adb522fdfbdc5e5b64d718d3683f04e9"
+  integrity sha1-qrTygK21Iv373F5bZNcY02g/BOk=
 
 get-caller-file@^2.0.5:
   version "2.0.5"
@@ -1819,6 +1849,27 @@ readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.6.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
+redis-errors@^1.0.0:
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/redis-errors/download/redis-errors-1.2.0.tgz#eb62d2adb15e4eaf4610c04afe1529384250abad"
+  integrity sha1-62LSrbFeTq9GEMBK/hUpOEJQq60=
+
+redis-parser@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/redis-parser/download/redis-parser-3.0.0.tgz#b66d828cdcafe6b4b8a428a7def4c6bcac31c8b4"
+  integrity sha1-tm2CjNyv5rS4pCin3vTGvKwxyLQ=
+  dependencies:
+    redis-errors "^1.0.0"
+
+redis@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmmirror.com/redis/download/redis-4.0.0.tgz#faefb8f156c231cacdd7b0ea854d91e92d3ea7d4"
+  integrity sha512-LtV6+h0F/e3F4mtDKKGZIl/ekEjsiqX2E0hmtNqjGqXj3wYi/nAfeVNWKRa7wFuJ+nkqwXATFGvu6h2fLCgA1A==
+  dependencies:
+    "@node-redis/client" "^1.0.0"
+    "@node-redis/json" "^1.0.0"
+    "@node-redis/search" "^1.0.0"
+
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.nlark.com/require-directory/download/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
@@ -2359,15 +2410,15 @@ y18n@^5.0.5:
   resolved "https://registry.nlark.com/y18n/download/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
   integrity sha1-f0k00PfKjFb5UxSTndzS3ZHOHVU=
 
+yallist@4.0.0, yallist@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.nlark.com/yallist/download/yallist-4.0.0.tgz?cache=0&sync_timestamp=1624607893982&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyallist%2Fdownload%2Fyallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
+  integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
+
 yallist@^2.1.2:
   version "2.1.2"
   resolved "https://registry.nlark.com/yallist/download/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
   integrity sha1-HBH5IY8HYImkfdUS+TxmmaaoHVI=
-
-yallist@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.nlark.com/yallist/download/yallist-4.0.0.tgz?cache=0&sync_timestamp=1624607893982&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyallist%2Fdownload%2Fyallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
-  integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
 
 yargs-parser@^20.2.2:
   version "20.2.9"
