@@ -129,7 +129,7 @@ export function upload(url: string, params: RequestUploadOpt) {
  * @param sendData
  * @param params
  */
-export function download(url: string, params: RequestDownloadOpt = {}) {
+function download(url: string, params: RequestDownloadOpt = {}) {
   return new Promise((resolve, reject) => {
     params.method = params.method || 'GET';
     params.args = params.args || { method: params.method };
