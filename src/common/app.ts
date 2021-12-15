@@ -11,7 +11,7 @@ import { loggerWrite } from '@/common/file';
 class App {
   private static instance: App;
 
-  fastify: FastifyInstance;
+  fastify: FastifyInstance | undefined;
 
   static getInstance() {
     if (!App.instance) App.instance = new App();
@@ -46,12 +46,14 @@ class App {
   }
 
   log() {
+    if (!this.fastify) throw new Error('uninitialized fastify');
     return this.fastify.log;
   }
 
   cors() {
-    const corsOpt = Cfg.get<{ [key: string]: any }>('index.cors');
-    const domainWhite = Cfg.get<string[]>('index.domainWhite');
+    if (!this.fastify) throw new Error('uninitialized fastify');
+    const corsOpt = Cfg.get('index.cors') as { [key: string]: any };
+    const domainWhite = Cfg.get('index.domainWhite') as string[];
     this.fastify.register(Cors, {
       origin: (origin, cb) => {
         if (typeof domainWhite === 'string') {
@@ -76,6 +78,7 @@ class App {
   }
 
   static() {
+    if (!this.fastify) throw new Error('uninitialized fastify');
     this.fastify.register(Static, {
       root: resolve('resources/static'),
       prefix: '/static/'
@@ -84,13 +87,16 @@ class App {
   }
 
   socketIo() {
+    if (!this.fastify) throw new Error('uninitialized fastify');
     // https://www.fastify.cn/docs/latest/Plugins/
+    // @ts-ignore
     SocketIo[Symbol.for('skip-override')] = true;
     this.fastify.register(SocketIo);
     return this;
   }
 
   router() {
+    if (!this.fastify) throw new Error('uninitialized fastify');
     Router(this.fastify);
     return this;
   }
@@ -100,7 +106,7 @@ class App {
       console.error('fastify null');
       return;
     }
-    port = port || Cfg.get<number>('index.port');
+    port = port || (Cfg.get('index.port') as number);
     this.fastify.listen(port, address, (err, address) => {
       if (err) throw err;
       console.log(`listening on ${port}`);

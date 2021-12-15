@@ -30,7 +30,7 @@ export function fileBySuffix(path: string, suffix: string) {
       let filePath = resolve(path, d);
       let stat = fs.statSync(filePath);
       if (stat.isDirectory()) {
-        files = files.concat(fileBySuffix(filePath, suffix));
+        files = files.concat(fileBySuffix(filePath, suffix) as string[]);
       }
       if (stat.isFile() && extname(filePath) === suffix) {
         files.push(filePath);
@@ -136,6 +136,7 @@ export function readLine(path: string, index?: number): Promise<string | any[]> 
         io.on('line', (line) => {
           line = line.replace(/(^\s*)|(\s*$)/g, '');
           io.close();
+          // @ts-ignore
           if (isNull(line)) line = null;
           resolve(line);
         });
@@ -183,7 +184,7 @@ export async function writeFile(
 ) {
   if (!isAbsolute(path)) path = resolve(path);
   return new Promise((resolve) =>
-    fs.writeFile(path, data, options, (err) => {
+    fs.writeFile(path, data, options || {}, (err) => {
       if (err) {
         resolve(0);
       }
@@ -203,7 +204,7 @@ export async function appendFile(
 ) {
   if (!isAbsolute(path)) path = resolve(path);
   return new Promise((resolve) =>
-    fs.appendFile(path, data, options, (err) => {
+    fs.appendFile(path, data, options || {}, (err) => {
       if (err) {
         resolve(0);
       }

@@ -7,8 +7,8 @@ export interface taskOpt {
 class Timer {
   private static instance: Timer;
   public taskList: { [key: string]: (is: boolean, that?: Timer) => Promise<number | string> } = {};
-  public Timeouts: { [key: string]: NodeJS.Timeout };
-  public scheduleJobs: { [key: string]: Job };
+  public Timeouts: { [key: string]: NodeJS.Timeout } = {};
+  public scheduleJobs: { [key: string]: Job } = {};
 
   static getInstance() {
     if (!Timer.instance) Timer.instance = new Timer();

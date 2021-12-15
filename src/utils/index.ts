@@ -70,58 +70,61 @@ export function dateFormat(fmt: string = 'yyyy-MM-dd'): string {
 
 /**
  * 深拷贝
- * @param sourceObj
- * @param targetObj
+ * @param obj
  */
-export function deepClone(sourceObj: any, targetObj: any) {
-  let cloneObj: any = {};
-  if (!sourceObj || typeof sourceObj !== 'object' || sourceObj.length === undefined) {
-    return sourceObj;
-  }
-  if (sourceObj instanceof Array) {
-    cloneObj = sourceObj.concat();
-  } else {
-    for (let i in sourceObj) {
-      if (typeof sourceObj[i] === 'object') {
-        cloneObj[i] = deepClone(sourceObj[i], {});
-      } else {
-        cloneObj[i] = sourceObj[i];
-      }
+ export function deepCopy<T>(obj: any): T {
+  const isArray = Array.isArray(obj);
+  let result: any = {};
+  if (isArray) result = [];
+  let temp = null;
+  let key = null;
+  let keys = Object.keys(obj);
+  keys.map((item, index) => {
+    key = item;
+    temp = obj[key];
+    if (temp && typeof temp === 'object') {
+      if (isArray) result.push(deepCopy(temp));
+      else result[key] = deepCopy(temp);
+    } else {
+      if (isArray) result.push(temp);
+      else result[key] = temp;
     }
-  }
-  return cloneObj;
+  });
+  return result;
 }
 
 /**
  * 防抖
  */
-export function debounce(fun: Function, wait: number) {
-  let timer: number = null;
+export function debounce(func: Function, wait: number): any {
+  let timer: number | null = null;
   return function () {
-    if (timer !== null) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(fun, wait);
+    // @ts-ignore
+    const context = this;
+    const args = arguments; // 存一下传入的参数
+    if (timer) clearTimeout(timer);
+    func.apply(context, args);
+    timer = setTimeout(func, wait);
   };
 }
 
 /**
  * 节流
  */
-export function throttle(fun: Function, delay: number) {
-  let timer: number = null;
+export function throttle(func: Function, delay: number): any {
+  let timer: number | null = null;
   let startTime = Date.now();
   return function () {
-    let curTime = Date.now();
-    let remaining = delay - (curTime - startTime);
-    let context = this;
-    let args = arguments;
-    clearTimeout(timer);
+    const remaining = delay - (Date.now() - startTime);
+    // @ts-ignore
+    const context = this;
+    const args = arguments;
+    if (timer) clearTimeout(timer);
     if (remaining <= 0) {
-      fun.apply(context, args);
+      func.apply(context, args);
       startTime = Date.now();
     } else {
-      timer = setTimeout(fun, remaining);
+      timer = setTimeout(func, remaining);
     }
   };
 }
@@ -131,6 +134,6 @@ export function throttle(fun: Function, delay: number) {
  * @param start
  * @param end
  */
-export function random(start: number = 0, end: number = 1) {
-  return Math.floor(Math.random() * (end - start + 1) + start);
+export function random(start: number = 0, end: number = 1): number {
+  return (Math.random() * (end - start + 1) + start) | 0;
 }

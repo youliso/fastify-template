@@ -6,7 +6,7 @@ import IndexServer from '@/servers';
 const indexServer = new IndexServer();
 
 @Controller('')
-class Index {
+export class Index {
   @RequestMapping({ url: '/' })
   async index(request: FastifyRequest, reply: FastifyReply) {
     indexServer.test();

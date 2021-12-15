@@ -13,8 +13,8 @@ export default (
   opts: FastifyPluginOptions,
   done: (err?: Error) => void
 ) => {
-  const corsOpt = Cfg.get<{ [key: string]: any }>('index.cors');
-  const domainWhite = Cfg.get<string[]>('index.domainWhite');
+  const corsOpt = Cfg.get('index.cors') as { [key: string]: any };
+  const domainWhite = Cfg.get('index.domainWhite') as string[];
   fastify.decorate(
     'socketIo',
     new socketIo(fastify.server, {
@@ -32,7 +32,7 @@ export default (
             callback(new Error('Not allowed by CORS'));
             return;
           }
-          if (domainWhite.indexOf(origin) !== -1) {
+          if (domainWhite && origin && domainWhite.indexOf(origin) !== -1) {
             callback(null, true);
           } else {
             callback(new Error('Not allowed by CORS'));
