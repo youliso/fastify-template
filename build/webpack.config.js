@@ -1,5 +1,21 @@
 const path = require('path');
+const fs = require('fs');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+let patterns = [
+  {
+    from: path.resolve('resources'),
+    to: path.resolve('dist/resources')
+  }
+];
+
+try {
+  fs.accessSync(path.resolve('out'));
+  patterns.push({
+    from: path.resolve('resources'),
+    to: path.resolve('out/resources')
+  });
+} catch (error) {}
 
 module.exports = (env) => {
   return {
@@ -55,16 +71,7 @@ module.exports = (env) => {
     },
     plugins: [
       new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: path.resolve('resources'),
-            to: path.resolve('dist/resources')
-          },
-          {
-            from: path.resolve('resources'),
-            to: path.resolve('out/resources')
-          }
-        ]
+        patterns
       })
     ]
   };
