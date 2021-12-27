@@ -5,8 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "node build/dev.js",
-    "build": "node build/index.js",
-    "build:pkg": "node build/index.js && pkg dist/app.js -c build/pkg.json --compress Brotli"
+    "build": "node build/index.js"
   },
   "devDependencies": {
     "@swc/core": "^1.2.120",
