@@ -1,8 +1,8 @@
 const path = require('path');
-const { exec } = require('child_process');
 const fs = require('fs');
 const pack = require('../package.json');
 const webpack = require('webpack');
+const pkg = require('pkg');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const mainCfg = require('./webpack.config')('production'); //主进程
 const [, , type] = process.argv;
@@ -67,19 +67,14 @@ webpack([mainCfg], (err, stats) => {
   );
 
   if (type === 'pkg') {
-    exec(
-      'pkg dist/app.js -c build/pkg.json --compress Brotli',
-      {
-        cwd: path.resolve()
-      },
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(error);
-          return;
-        }
-        console.log(stdout);
-        console.log(stderr);
-      }
-    );
+    pkg.exec([
+      'dist/app.js',
+      '-t',
+      'node16-macos-x64,node16-linux-x64,node16-win-x64',
+      '--out-path',
+      'out',
+      '--compress',
+      'Brotli'
+    ]);
   }
 });
