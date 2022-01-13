@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const { spawn } = require('child_process');
 const path = require('path');
-const fs = require('fs');
 
 let Mprocess = null;
 let manualRestart = false;

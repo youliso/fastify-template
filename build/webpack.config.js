@@ -12,8 +12,8 @@ module.exports = (env) => {
       app: './src/index.ts'
     },
     output: {
+      clean: true,
       filename: '[name].js',
-      chunkFilename: '[id].bundle.js',
       path: path.resolve('dist')
     },
     optimization: {

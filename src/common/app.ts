@@ -6,7 +6,7 @@ import Static from 'fastify-static';
 import Router from '@/common/router';
 import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
-import { loggerWrite } from '@/common/file';
+import { loggerWrite } from '@/common/log';
 
 class App {
   private static instance: App;

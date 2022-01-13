@@ -1,5 +1,5 @@
 import App from '@/common/app';
-import { loggerInit } from '@/common/file';
+import { loggerInit } from '@/common/log';
 import { cfgInit } from '@/cfg';
 
 await Promise.all([cfgInit(), loggerInit()]);

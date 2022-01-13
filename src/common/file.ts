@@ -138,7 +138,7 @@ export function readLine(path: string, index?: number): Promise<string | any[]> 
  * @param options
  * @returns 0 失败 1成功
  */
-export async function mkdir(path: string, options: MakeDirectoryOptions) {
+export async function mkdir(path: string, options?: MakeDirectoryOptions) {
   return new Promise((resolve) => {
     fs.mkdir(path, options || { recursive: true }, (err) => {
       if (err) {

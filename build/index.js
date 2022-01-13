@@ -21,36 +21,18 @@ if (type === 'pkg') {
   });
 }
 
-function deleteFolderRecursive(url) {
-  let files = [];
-  if (fs.existsSync(url)) {
-    files = fs.readdirSync(url);
-    files.forEach(function (file, index) {
-      let curPath = path.join(url, file);
-      if (fs.statSync(curPath).isDirectory()) {
-        // recurse
-        deleteFolderRecursive(curPath);
-      } else {
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(url);
-  } else {
-    console.log('...');
-  }
-}
-// 清除dist
-deleteFolderRecursive(path.resolve('dist'));
 mainCfg.plugins.push(
   new CopyWebpackPlugin({
     patterns
   })
 );
+
 for (const i in pack.dependencies) mainCfg.externals[i] = `require("${i}")`;
-webpack([mainCfg], (err, stats) => {
+
+webpack(mainCfg, (err, stats) => {
   if (err || stats.hasErrors()) {
     // 在这里处理错误
-    console.log(stats.stats[0], err);
+    console.log(stats, err);
     throw err;
   }
   fs.writeFileSync(
