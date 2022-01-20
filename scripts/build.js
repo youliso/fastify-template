@@ -48,15 +48,26 @@ webpack(mainCfg, (err, stats) => {
     )
   );
 
-  if (type === 'pkg') {
-    pkg.exec([
-      'dist/app.js',
-      '-t',
-      'node16-macos-x64,node16-linux-x64,node16-win-x64',
-      '--out-path',
-      'out',
-      '--compress',
-      'Brotli'
-    ]);
+  if (type) {
+    let cmd = ['dist/app.js', '--out-path', 'out', '--compress', 'Brotli', '-t'];
+    switch (type) {
+      case 'pkg':
+        switch (process.platform) {
+          case 'win32':
+            cmd.push('node16-win-x64');
+            break;
+          case 'linux':
+            cmd.push('node16-linux-x64');
+            break;
+          case 'darwin':
+            cmd.push('node16-macos-x64');
+            break;
+        }
+        break;
+      case 'pkga':
+        cmd.push('node16-macos-x64,node16-linux-x64,node16-win-x64');
+        break;
+    }
+    pkg.exec(cmd);
   }
 });
