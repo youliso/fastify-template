@@ -13,8 +13,8 @@ export default (
   opts: FastifyPluginOptions,
   done: (err?: Error) => void
 ) => {
-  const corsOpt = Cfg.get('index.cors') as { [key: string]: any };
-  const domainWhite = Cfg.get('index.domainWhite') as string[];
+  const corsOpt = Cfg.get('app.cors') as { [key: string]: any };
+  const domainWhite = Cfg.get('app.domainWhite') as string[];
   fastify.decorate(
     'socketIo',
     new socketIo(fastify.server, {

@@ -52,8 +52,8 @@ class App {
 
   cors() {
     if (!this.fastify) throw new Error('uninitialized fastify');
-    const corsOpt = Cfg.get('index.cors') as { [key: string]: any };
-    const domainWhite = Cfg.get('index.domainWhite') as string[];
+    const corsOpt = Cfg.get('app.cors') as { [key: string]: any };
+    const domainWhite = Cfg.get('app.domainWhite') as string[];
     this.fastify.register(Cors, {
       origin: (origin, cb) => {
         if (typeof domainWhite === 'string') {
@@ -106,7 +106,7 @@ class App {
       console.error('fastify null');
       return;
     }
-    port = port || (Cfg.get('index.port') as number);
+    port = port || (Cfg.get('app.port') as number);
     this.fastify.listen(port, address, (err, address) => {
       if (err) throw err;
       console.log(`listening on ${port}`);

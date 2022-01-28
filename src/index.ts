@@ -1,6 +1,7 @@
 import App from '@/common/app';
+import Cfg from '@/common/cfg';
 import { loggerInit } from '@/common/log';
-import { cfgInit } from '@/cfg';
 
-await Promise.all([cfgInit(), loggerInit()]);
+await Cfg.init();
+await loggerInit();
 App.init().cors().static().socketIo().router().listen();
