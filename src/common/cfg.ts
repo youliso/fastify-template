@@ -48,10 +48,42 @@ export class Cfg {
     }
   }
 
-  set(key: string, value: any) {
-    this.sharedObject[key] = value;
-  }
+  set<Value>(key: string, value: Value, exists: boolean = false): void {
+    if (key === '') {
+      console.error('Invalid key, the key can not be a empty string');
+      return;
+    }
 
+    if (!key.includes('.')) {
+      if (Object.prototype.hasOwnProperty.call(this.sharedObject, key) && exists) {
+        console.warn(`The key ${key} looks like already exists on obj.`);
+      }
+      this.sharedObject[key] = value;
+    }
+
+    const levels = key.split('.');
+    const lastKey = levels.pop()!;
+
+    let cur = this.sharedObject;
+    for (const level of levels) {
+      if (Object.prototype.hasOwnProperty.call(cur, level)) {
+        cur = cur[level];
+      } else {
+        console.error(`Cannot set value because the key ${key} is not exists on obj.`);
+        return;
+      }
+    }
+
+    if (typeof cur !== 'object') {
+      console.error(`Invalid key ${key} because the value of this key is not a object.`);
+      return;
+    }
+    if (Object.prototype.hasOwnProperty.call(cur, lastKey) && exists) {
+      console.warn(`The key ${key} looks like already exists on obj.`);
+    }
+    cur[lastKey] = value;
+  }
+  
   get<Value>(key: string): Value | undefined {
     if (key === '') {
       console.error('Invalid key, the key can not be a empty string');
