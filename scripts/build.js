@@ -27,8 +27,6 @@ mainCfg.plugins.push(
   })
 );
 
-for (const i in pack.dependencies) mainCfg.externals[i] = `require("${i}")`;
-
 webpack(mainCfg, (err, stats) => {
   if (err || stats.hasErrors()) {
     // 在这里处理错误

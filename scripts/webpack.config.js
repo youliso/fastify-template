@@ -1,7 +1,8 @@
 const path = require('path');
+const pack = require('../package.json');
 
 module.exports = (env) => {
-  return {
+  let config = {
     experiments: {
       topLevelAwait: true
     },
@@ -54,4 +55,6 @@ module.exports = (env) => {
     },
     plugins: []
   };
+  for (const i in pack.dependencies) config.externals[i] = `require("${i}")`;
+  return config;
 };
