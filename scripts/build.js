@@ -5,7 +5,8 @@ const webpack = require('webpack');
 const pkg = require('pkg');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const mainCfg = require('./webpack.config')('production'); //主进程
-const [, , type] = process.argv;
+const [, , type, platform, nodev, nodex, nobytecode] = process.argv;
+const isNobytecode = nobytecode === 'nobytecode';
 
 let patterns = [
   {
@@ -48,22 +49,30 @@ webpack(mainCfg, (err, stats) => {
 
   if (type) {
     let cmd = ['dist/app.js', '--out-path', 'out', '--compress', 'Brotli', '-t'];
+    isNobytecode && cmd.push(...['--no-bytecode', '--public']);
+    const v = nodev || '16';
+    const x = nodex || 'x64';
     switch (type) {
       case 'pkg':
-        switch (process.platform) {
+        switch (platform || process.platform) {
+          case 'w':
+          case 'win':
           case 'win32':
-            cmd.push('node16-win-x64');
+            cmd.push(`node${v}-win-${x}`);
             break;
+          case 'l':
           case 'linux':
-            cmd.push('node16-linux-x64');
+            cmd.push(`node${v}-linux-${x}`);
             break;
+          case 'm':
+          case 'mac':
           case 'darwin':
-            cmd.push('node16-macos-x64');
+            cmd.push(`node${v}-macos-${x}`);
             break;
         }
         break;
       case 'pkga':
-        cmd.push('node16-macos-x64,node16-linux-x64,node16-win-x64');
+        cmd.push(`node${v}-macos-${x},node${v}-linux-${x},node${v}-win-${x}`);
         break;
     }
     pkg.exec(cmd);
