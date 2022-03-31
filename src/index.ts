@@ -4,4 +4,4 @@ import { loggerInit } from '@/common/log';
 
 await Cfg.init();
 await loggerInit();
-App.init().cors().static().socketIo().router().listen();
+App.init().cors().static().socketIo().useControl().listen();

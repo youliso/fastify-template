@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import Fastify from 'fastify';
 import Cors from 'fastify-cors';
 import Static from 'fastify-static';
-import Router from '@/common/router';
+import useController from '@/common/controller';
 import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
 import { loggerWrite } from '@/common/log';
@@ -95,9 +95,9 @@ class App {
     return this;
   }
 
-  router() {
+  useControl() {
     if (!this.fastify) throw new Error('uninitialized fastify');
-    Router(this.fastify);
+    useController(this.fastify);
     return this;
   }
 
