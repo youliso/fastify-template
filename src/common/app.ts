@@ -1,8 +1,8 @@
 import type { FastifyServerOptions, FastifyInstance, FastifyRequest } from 'fastify';
 import { resolve } from 'path';
 import Fastify from 'fastify';
-import Cors from 'fastify-cors';
-import Static from 'fastify-static';
+import Cors from '@fastify/cors';
+import Static from '@fastify/static';
 import useController from '@/common/controller';
 import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
