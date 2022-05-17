@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^7.0.0",
+    "@fastify/multipart": "^6.0.0",
     "@fastify/static": "^5.0.2",
     "fastify": "^3.29.0",
     "node-schedule": "^2.1.0",

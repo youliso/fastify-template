@@ -2,6 +2,7 @@ import type { FastifyServerOptions, FastifyInstance, FastifyRequest } from 'fast
 import { resolve } from 'path';
 import Fastify from 'fastify';
 import Cors from '@fastify/cors';
+import Multipart from '@fastify/multipart';
 import Static from '@fastify/static';
 import useController from '@/common/controller';
 import SocketIo from '@/common/socket';
@@ -75,6 +76,13 @@ class App {
       exposedHeaders: corsOpt.exposedHeaders
     });
     return this;
+  }
+
+  multipart(){
+    if (!this.fastify) throw new Error('uninitialized fastify');
+    const limits = Cfg.get('multipart.limits') as { [key: string]: any };
+    this.fastify.register(Multipart,limits)
+    return this
   }
 
   static() {
