@@ -93,11 +93,11 @@ class App {
     return this;
   }
 
-  static() {
+  static(root?: string, prefix?: string) {
     if (!this.fastify) throw new Error('uninitialized fastify');
     this.fastify.register(Static, {
-      root: resolve('resources/static'),
-      prefix: '/static/'
+      root: root || resolve('resources/static'),
+      prefix: prefix || '/static/'
     });
     return this;
   }
@@ -117,12 +117,13 @@ class App {
     return this;
   }
 
-  listen(port?: number, host: string = '0.0.0.0') {
+  listen(port?: number, host?: string) {
     if (!this.fastify) {
       console.error('fastify null');
       return;
     }
     port = port || (Cfg.get('app.port') as number);
+    host = host || (Cfg.get('app.host') as string);
     this.fastify
       .listen({
         port,
