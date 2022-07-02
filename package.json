@@ -8,21 +8,21 @@
     "build": "node scripts/build.js"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.177",
+    "@swc/core": "^1.2.207",
     "@types/node-schedule": "^2.1.0",
-    "copy-webpack-plugin": "^10.2.4",
-    "pkg": "^5.6.0",
-    "prettier": "^2.6.2",
-    "swc-loader": "^0.2.0",
-    "typescript": "^4.6.4",
-    "webpack": "^5.72.0"
+    "copy-webpack-plugin": "^11.0.0",
+    "pkg": "^5.7.0",
+    "prettier": "^2.7.1",
+    "swc-loader": "^0.2.3",
+    "typescript": "^4.7.4",
+    "webpack": "^5.73.0"
   },
   "dependencies": {
-    "@fastify/cors": "^7.0.0",
-    "@fastify/multipart": "^6.0.0",
-    "@fastify/static": "^5.0.2",
-    "fastify": "^3.29.0",
+    "@fastify/cors": "^8.0.0",
+    "@fastify/multipart": "^7.1.0",
+    "@fastify/static": "^6.4.0",
+    "fastify": "^4.2.0",
     "node-schedule": "^2.1.0",
-    "socket.io": "^4.5.0"
+    "socket.io": "^4.5.1"
   }
 }

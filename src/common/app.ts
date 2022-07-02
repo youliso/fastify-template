@@ -8,6 +8,7 @@ import useController from '@/common/controller';
 import SocketIo from '@/common/socket';
 import Cfg from '@/common/cfg';
 import { loggerWrite } from '@/common/log';
+import { Error as RError } from '@/common/restful';
 
 class App {
   private static instance: App;
@@ -43,6 +44,13 @@ class App {
         }
       })
     );
+    this.fastify.setErrorHandler(async (error, request, reply) => {
+      this.fastify?.log.error(error);
+      reply.send(RError(error.message));
+    });
+    this.fastify.setNotFoundHandler(async (request, reply) => {
+      reply.send(RError('Not Found'));
+    });
     return this;
   }
 
@@ -78,11 +86,11 @@ class App {
     return this;
   }
 
-  multipart(){
+  multipart() {
     if (!this.fastify) throw new Error('uninitialized fastify');
     const limits = Cfg.get('multipart.limits') as { [key: string]: any };
-    this.fastify.register(Multipart,limits)
-    return this
+    this.fastify.register(Multipart, limits);
+    return this;
   }
 
   static() {
@@ -109,16 +117,18 @@ class App {
     return this;
   }
 
-  listen(port?: number, address: string = '0.0.0.0') {
+  listen(port?: number, host: string = '0.0.0.0') {
     if (!this.fastify) {
       console.error('fastify null');
       return;
     }
     port = port || (Cfg.get('app.port') as number);
-    this.fastify.listen(port, address, (err, address) => {
-      if (err) throw err;
-      console.log(`listening on ${port}`);
-    });
+    this.fastify
+      .listen({
+        port,
+        host
+      })
+      .then((e) => console.log(`listening on ${e}`));
   }
 }
 
