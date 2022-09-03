@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { readFile } from '@/common/file';
 
 type Obj<Value> = {} & {
@@ -11,7 +10,33 @@ type Obj<Value> = {} & {
 export class Cfg {
   private static instance: Cfg;
 
-  public sharedObject: { [key: string]: any } = {};
+  public sharedObject: { [key: string]: any } = {
+    app: {
+      host: '127.0.0.1',
+      port: 3000,
+      domainWhite: '*',
+      cors: {
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        exposedHeaders: ['Content-Type', 'Authorization']
+      },
+      logger: false,
+      multipart: {
+        limits: {
+          fieldNameSize: 100,
+          fieldSize: 100,
+          fields: 10,
+          fileSize: 1000000,
+          files: 1,
+          headerPairs: 2000
+        }
+      },
+      static: false,
+      socketIo: {
+        path: '/io'
+      }
+    }
+  };
 
   static getInstance() {
     if (!Cfg.instance) Cfg.instance = new Cfg();
@@ -20,26 +45,13 @@ export class Cfg {
 
   constructor() {}
 
-  async init() {
-    try {
-      const configs = JSON.parse(
-        (await readFile(join('resources/cfg/index.json'), {
-          encoding: 'utf-8'
-        })) as string
-      ) as string[];
-      for (const config of configs) await this.use(config);
-    } catch (e) {
-      console.error('[cfg init]', e);
-    }
-  }
-
   /**
    * 挂载配置
-   * @param name 配置文件名
+   * @param path 配置文件名
    */
-  async use(name: string) {
+  async use(path: string, name: string) {
     try {
-      const cfg = (await readFile(join(`resources/cfg/${name}.json`), {
+      const cfg = (await readFile(path, {
         encoding: 'utf-8'
       })) as any;
       cfg && this.set(name, JSON.parse(cfg));
@@ -83,7 +95,7 @@ export class Cfg {
     }
     cur[lastKey] = value;
   }
-  
+
   get<Value>(key: string): Value | undefined {
     if (key === '') {
       console.error('Invalid key, the key can not be a empty string');

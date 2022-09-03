@@ -1,13 +1,12 @@
-import type { FastifyServerOptions, FastifyInstance, FastifyRequest } from 'fastify';
-import { resolve } from 'path';
+import type { FastifyServerOptions, FastifyInstance } from 'fastify';
 import Fastify from 'fastify';
 import Cors from '@fastify/cors';
 import Multipart from '@fastify/multipart';
 import Static from '@fastify/static';
 import useController from '@/common/controller';
 import SocketIo from '@/common/socket';
+import { stat } from '@/common/file';
 import Cfg from '@/common/cfg';
-import { loggerWrite } from '@/common/log';
 import { Error as RError } from '@/common/restful';
 
 class App {
@@ -22,41 +21,33 @@ class App {
 
   constructor() {}
 
-  init(opt: FastifyServerOptions = {}) {
-    this.fastify = Fastify(
-      Object.assign(opt, {
-        logger: {
-          serializers: {
-            req(request: FastifyRequest) {
-              return {
-                method: request.method,
-                url: request.url,
-                headers: request.headers,
-                hostname: request.hostname,
-                remoteAddress: request.ip,
-                remotePort: request.socket.remotePort
-              };
-            }
-          },
-          stream: {
-            write: loggerWrite
-          }
-        }
-      })
-    );
+  init() {
+    this.fastify = Fastify({
+      logger: Cfg.get<any>('app.logger')
+    });
+
     this.fastify.setErrorHandler(async (error, request, reply) => {
       this.fastify?.log.error(error);
       reply.send(RError(error.message));
     });
+
     this.fastify.setNotFoundHandler(async (request, reply) => {
       reply.send(RError('Not Found'));
     });
+
+    //static
+    const staticCfg = Cfg.get<{ root: string; prefix: string } & boolean>('app.static');
+    staticCfg &&
+      stat(staticCfg.root).then((is) => {
+        is && this.fastify!.register(Static, staticCfg);
+      });
+
     return this;
   }
 
-  log() {
+  log(level: 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace', ...args: any[]) {
     if (!this.fastify) throw new Error('uninitialized fastify');
-    return this.fastify.log;
+    this.fastify.log[level](args);
   }
 
   cors() {
@@ -90,15 +81,6 @@ class App {
     if (!this.fastify) throw new Error('uninitialized fastify');
     const limits = Cfg.get('multipart.limits') as { [key: string]: any };
     this.fastify.register(Multipart, limits);
-    return this;
-  }
-
-  static(root?: string, prefix?: string) {
-    if (!this.fastify) throw new Error('uninitialized fastify');
-    this.fastify.register(Static, {
-      root: root || resolve('resources/static'),
-      prefix: prefix || '/static/'
-    });
     return this;
   }
 

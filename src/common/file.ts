@@ -60,6 +60,19 @@ export function unlink(path: string) {
 }
 
 /**
+ * 检查目录是否存在于当前目录中、以及是否可写
+ * @return 0 不存在 1 存在
+ */
+export function stat(path: string): Promise<0 | 1> {
+  return new Promise((resolve) =>
+    fs.stat(path, (err) => {
+      if (err) resolve(0);
+      else resolve(1);
+    })
+  );
+}
+
+/**
  * 检查文件是否存在于当前目录中、以及是否可写
  * @return 0 不存在 1 只可读 2 存在可读写
  */

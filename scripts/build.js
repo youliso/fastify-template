@@ -1,32 +1,10 @@
-const path = require('path');
 const fs = require('fs');
 const pack = require('../package.json');
 const webpack = require('webpack');
 const pkg = require('pkg');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const mainCfg = require('./webpack.config')('production'); //主进程
 const [, , type, platform, nodev, nodex, nobytecode] = process.argv;
 const isNobytecode = nobytecode === 'nobytecode';
-
-let patterns = [
-  {
-    from: path.resolve('resources'),
-    to: path.resolve('dist/resources')
-  }
-];
-
-if (type === 'pkg') {
-  patterns.push({
-    from: path.resolve('resources'),
-    to: path.resolve('out/resources')
-  });
-}
-
-mainCfg.plugins.push(
-  new CopyWebpackPlugin({
-    patterns
-  })
-);
 
 webpack(mainCfg, (err, stats) => {
   if (err || stats.hasErrors()) {

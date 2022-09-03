@@ -42,7 +42,7 @@ export default (
         allowedHeaders: corsOpt.allowHeaders,
         exposedHeaders: corsOpt.exposeHeaders
       },
-      path: Cfg.get('socket.path'),
+      path: Cfg.get('app.socketIo.path'),
       serveClient: false,
       pingInterval: 10000,
       pingTimeout: 5000,

@@ -1,7 +1,8 @@
-import App from '@/common/app';
 import Cfg from '@/common/cfg';
-import { loggerInit } from '@/common/log';
+import App from '@/common/app';
 
-await Cfg.init();
-await loggerInit();
-App.init().cors().multipart().static().socketIo().useControl().listen();
+const [, , appCfgPath] = process.argv;
+
+appCfgPath && (await Cfg.use(appCfgPath, 'app'));
+
+App.init().cors().multipart().socketIo().useControl().listen();
