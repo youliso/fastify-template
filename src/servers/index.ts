@@ -1,5 +1,3 @@
-export default class IndexServer {
-  test() {
-    console.log('test');
-  }
-}
+export const test = () => {
+  console.log('test');
+};

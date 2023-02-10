@@ -2,15 +2,13 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { Controller, RequestMapping } from '@/common/decorators';
 import { validationHandler } from '@/hooks';
 import { Success } from '@/common/restful';
-import IndexServer from '@/servers';
-
-const indexServer = new IndexServer();
+import { test } from '@/servers';
 
 @Controller()
 export class Index {
   @RequestMapping({ method: 'GET', url: '/' })
   async index(request: FastifyRequest, reply: FastifyReply) {
-    indexServer.test();
+    test();
     reply.send('hello fastify');
   }
 
