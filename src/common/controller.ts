@@ -1,7 +1,7 @@
 import type { FastifyInstance, RouteOptions } from 'fastify';
 import { routes } from '@/common/decorators';
 
-export * from '@/controllers/mod';
+import '@/controllers/mod';
 
 /**
  * 注册路由
