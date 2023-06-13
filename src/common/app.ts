@@ -27,8 +27,9 @@ class App {
     });
 
     this.fastify.setErrorHandler(async (error, request, reply) => {
+      process.env.NODE_ENV === 'development' &&  console.error(error);
       this.fastify?.log.error(error);
-      reply.send(RError(error.message));
+      reply.send(RError('servers error'));
     });
 
     this.fastify.setNotFoundHandler(async (request, reply) => {
@@ -64,7 +65,7 @@ class App {
           cb(new Error('Not allowed'), false);
           return;
         }
-        if (domainWhite[domainWhite.indexOf(origin)]) {
+        if (origin && domainWhite[domainWhite.indexOf(origin)]) {
           cb(null, true);
           return;
         }
