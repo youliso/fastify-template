@@ -2,5 +2,4 @@
 /logs
 /node_modules
 /out
-.swc
-./package-lock.json
+package-lock.json
