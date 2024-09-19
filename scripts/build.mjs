@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import pkg from 'pkg';
+import pkg from '@yao-pkg/pkg';
 import { rspack } from '@rspack/core';
 import rspackConfig from './rspack.config.mjs';
 import packageCfg from '../package.json' assert { type: 'json' };
@@ -30,9 +30,9 @@ rspack(rspackConfig(false), (err, stats) => {
   );
 
   if (type) {
-    let cmd = ['dist/app.js', '--out-path', 'out', '--compress', 'Brotli', '-t'];
+    let cmd = ['dist/index.js', '--out-path', 'out', '--compress', 'Brotli', '-t'];
     isNobytecode && cmd.push(...['--no-bytecode', '--public']);
-    const v = nodev || '16';
+    const v = nodev || '20';
     const x = nodex || 'x64';
     switch (type) {
       case 'pkg':

@@ -10,7 +10,7 @@
   "devDependencies": {
     "@rspack/core": "^1.0.5",
     "@types/node-schedule": "^2.1.7",
-    "pkg": "^5.8.1",
+    "@yao-pkg/pkg": "^5.14.2",
     "prettier": "^3.3.3",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2"
