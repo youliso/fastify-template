@@ -5,4 +5,4 @@ const [, , appCfgPath] = process.argv;
 
 appCfgPath && (await Cfg.use(appCfgPath, 'app'));
 
-App.init().cors().multipart().socketIo().useControl().listen();
+App.init().cors().multipart().useControl().listen();

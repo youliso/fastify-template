@@ -1,10 +1,9 @@
-import type { FastifyServerOptions, FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import Fastify from 'fastify';
 import Cors from '@fastify/cors';
 import Multipart from '@fastify/multipart';
 import Static from '@fastify/static';
 import useController from '@/common/controller';
-import SocketIo from '@/common/socket';
 import { stat } from '@/common/file';
 import Cfg from '@/common/cfg';
 import { Error as RError } from '@/common/restful';
@@ -27,7 +26,7 @@ class App {
     });
 
     this.fastify.setErrorHandler(async (error, request, reply) => {
-      process.env.NODE_ENV === 'development' &&  console.error(error);
+      process.env.NODE_ENV === 'development' && console.error(error);
       this.fastify?.log.error(error);
       reply.send(RError('servers error'));
     });
@@ -82,15 +81,6 @@ class App {
     if (!this.fastify) throw new Error('uninitialized fastify');
     const limits = Cfg.get('multipart.limits') as { [key: string]: any };
     this.fastify.register(Multipart, limits);
-    return this;
-  }
-
-  socketIo() {
-    if (!this.fastify) throw new Error('uninitialized fastify');
-    // https://www.fastify.cn/docs/latest/Plugins/
-    // @ts-ignore
-    SocketIo[Symbol.for('skip-override')] = true;
-    this.fastify.register(SocketIo);
     return this;
   }
 
