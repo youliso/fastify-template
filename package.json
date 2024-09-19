@@ -4,25 +4,22 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "dev": "node scripts/dev.js",
-    "build": "node scripts/build.js"
+    "dev": "node scripts/buildCfg.mjs && node scripts/dev.mjs",
+    "build": "node scripts/buildCfg.mjs && node scripts/build.mjs"
   },
   "devDependencies": {
-    "@swc/core": "^1.3.63",
-    "@types/node-schedule": "^2.1.0",
+    "@rspack/core": "^1.0.5",
+    "@types/node-schedule": "^2.1.7",
     "pkg": "^5.8.1",
-    "prettier": "^2.8.8",
-    "swc-loader": "^0.2.3",
-    "tslib": "^2.5.3",
-    "typescript": "^5.1.3",
-    "webpack": "^5.86.0"
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@fastify/cors": "^8.3.0",
-    "@fastify/multipart": "^7.6.0",
-    "@fastify/static": "^6.10.2",
-    "fastify": "^4.18.0",
+    "@fastify/cors": "^10.0.0",
+    "@fastify/multipart": "^9.0.0",
+    "@fastify/static": "^8.0.0",
+    "fastify": "^5.0.0",
     "node-schedule": "^2.1.1",
-    "socket.io": "^4.6.2"
+    "socket.io": "^4.7.5"
   }
 }
