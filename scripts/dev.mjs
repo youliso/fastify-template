@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { rspack } from '@rspack/core';
+import path from 'node:path';
 import rspackConfig from './rspack.config.mjs';
 
 let Mprocess = null;
@@ -37,8 +38,21 @@ async function bMain() {
   });
 }
 
+
+function onLog(type, data) {
+  let color = type === 'err' ? '31m' : '34m';
+  const dataStr = data.toString(); // 将Buffer转换为字符串
+  dataStr.split(/\r?\n/).forEach((line) => {
+    if (line) {
+      console.log(
+        `\x1b[${color}[main ${new Date().toLocaleTimeString()}]\x1b[0m: \x1b[1;${type === 'err' ? color : '1m'}${line}\x1b[0m`
+      );
+    }
+  });
+}
+
 function spawns() {
-  let args = ['dist/app.js'];
+  let args = ['dist/index.js'];
   if (process.env.npm_execpath.endsWith('yarn.js')) {
     args = args.concat(process.argv.slice(3));
   } else if (process.env.npm_execpath.endsWith('npm-cli.js')) {
@@ -47,19 +61,10 @@ function spawns() {
   Mprocess = spawn('node', args, {
     cwd: path.resolve('./')
   });
-  Mprocess.stdout.on('data', (data) => {
-    const msg = data.toString().trim();
-    msg &&
-      console.log(
-        `\x1b[34m[main stdout ${new Date().toLocaleTimeString()}]\x1b[0m: \x1b[1m${msg}\x1b[0m`
-      );
-  });
-  Mprocess.stderr.on('data', (data) => {
-    const msg = data.toString().trim();
-    msg &&
-      console.log(
-        `\x1b[31m[main stderr ${new Date().toLocaleTimeString()}]\x1b[0m: \x1b[1;31m${msg}\x1b[0m`
-      );
+  Mprocess.stdout.on('data', (data) => onLog('info', data));
+  Mprocess.stderr.on('data', (data) => onLog('err', data));
+  Mprocess.on('exit', (e) => {
+    console.log('[exit]');
   });
   Mprocess.on('close', () => {
     if (!manualRestart) process.exit();

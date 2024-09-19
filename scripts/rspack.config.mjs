@@ -44,9 +44,16 @@ export default (isDevelopment) => ({
         loader: 'builtin:swc-loader',
         options: {
           jsc: {
+            transform: {
+              legacyDecorator: true
+            },
             parser: {
-              syntax: 'typescript'
-            }
+              syntax: 'typescript',
+              tsx: false,
+              decorators: true,
+              dynamicImport: true
+            },
+            target: 'es2022'
           }
         },
         type: 'javascript/auto'

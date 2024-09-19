@@ -12,6 +12,7 @@
     "@types/node-schedule": "^2.1.7",
     "pkg": "^5.8.1",
     "prettier": "^3.3.3",
+    "tslib": "^2.7.0",
     "typescript": "^5.6.2"
   },
   "dependencies": {
