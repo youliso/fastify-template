@@ -24,7 +24,7 @@ export default (isDevelopment) => ({
   output: {
     clean: true,
     path: outputPath,
-    filename: 'index.js'
+    filename: `${packageCfg.productName}.js`
   },
   resolve: {
     alias: {

@@ -30,7 +30,7 @@ rspack(rspackConfig(false), (err, stats) => {
   );
 
   if (type) {
-    let cmd = ['dist/index.js', '--out-path', 'out', '--compress', 'Brotli', '-t'];
+    let cmd = [`dist/${packageCfg.productName}.js`, '--out-path', 'out', '--compress', 'Brotli', '-t'];
     isNobytecode && cmd.push(...['--no-bytecode', '--public']);
     const v = nodev || '20';
     const x = nodex || 'x64';

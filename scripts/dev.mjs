@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { rspack } from '@rspack/core';
 import path from 'node:path';
 import rspackConfig from './rspack.config.mjs';
+import packageCfg from '../package.json' assert { type: 'json' };
 
 let Mprocess = null;
 let manualRestart = false;
@@ -52,7 +53,7 @@ function onLog(type, data) {
 }
 
 function spawns() {
-  let args = ['dist/index.js'];
+  let args = [`dist/${packageCfg.productName}.js`];
   if (process.env.npm_execpath.endsWith('yarn.js')) {
     args = args.concat(process.argv.slice(3));
   } else if (process.env.npm_execpath.endsWith('npm-cli.js')) {
