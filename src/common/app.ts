@@ -102,7 +102,7 @@ class App {
         port,
         host
       })
-      .then((e) => console.log(`listening on ${e}`));
+      .then(() => console.log(`listening on ${host}:${port}`));
   }
 }
 
