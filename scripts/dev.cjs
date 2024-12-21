@@ -1,44 +1,48 @@
-import { spawn } from 'node:child_process';
-import { rspack } from '@rspack/core';
-import path from 'node:path';
-import rspackConfig from './rspack.config.mjs';
-import packageCfg from '../package.json' assert { type: 'json' };
+const { spawn } = require('node:child_process');
+const { rspack } = require('@rspack/core');
+const path = require('node:path');
+const { buildConfig } = require('./buildCfg.cjs');
+const rspackConfig = require('./rspack.config.cjs');
+const packageCfg = require('../package.json');
 
 let Mprocess = null;
 let manualRestart = false;
 
-async function bMain() {
+async function startMain(envConfig) {
   return new Promise((resolve) => {
-    const watcher = rspack(rspackConfig(true));
+    const watcher = rspack(rspackConfig(true, envConfig));
     watcher.watch(
       {
-        aggregateTimeout: 500, poll: 1000, ignored: /node_modules/
+        aggregateTimeout: 300,
+        poll: undefined
       },
       (err, stats) => {
         if (err || stats.hasErrors()) {
-          console.error(err?.stack || err);
           if (err?.details) {
             console.error(err.details);
-          } else {
-            console.error(stats.toString());
           }
-          throw new Error('Error occured in main process');
+          console.log(
+            stats.toString({
+              chunks: false, // 使构建过程更静默无输出
+              colors: true // 在控制台展示颜色
+            })
+          );
+          process.exit();
         }
         if (Mprocess && Mprocess.kill) {
           manualRestart = true;
           process.kill(Mprocess.pid);
           Mprocess = null;
-          spawns();
+          startElectron();
           setTimeout(() => {
             manualRestart = false;
           }, 5000);
         }
-        resolve(1);
+        resolve(0);
       }
     );
   });
 }
-
 
 function onLog(type, data) {
   let color = type === 'err' ? '31m' : '34m';
@@ -52,7 +56,8 @@ function onLog(type, data) {
   });
 }
 
-function spawns() {
+
+function startApp() {
   let args = [`dist/${packageCfg.productName}.js`];
   if (process.env.npm_execpath.endsWith('yarn.js')) {
     args = args.concat(process.argv.slice(3));
@@ -71,5 +76,12 @@ function spawns() {
     if (!manualRestart) process.exit();
   });
 }
+const start = async () => {
+  console.time('dev');
+  const { envConfig } = await buildConfig();
+  await startMain(envConfig).catch(console.error);
+  startApp();
+  console.timeEnd('dev');
+};
 
-bMain().then(() => spawns());
+start();

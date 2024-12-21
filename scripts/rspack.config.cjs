@@ -1,23 +1,17 @@
-import { rspack } from '@rspack/core';
-import { resolve } from 'node:path';
-import { builtinModules } from 'node:module';
-import packageCfg from '../package.json' assert { type: 'json' };
-import ENV from './.env.json' assert { type: 'json' };
+const { rspack } = require('@rspack/core');
+const { resolve } = require('node:path');
+const { builtinModules } = require('node:module');
 
+const packageCfg = require('../package.json');
 const outputPath = resolve('dist');
 const tsConfig = resolve('tsconfig.json');
 
-let plugins = [
-  new rspack.DefinePlugin({
-    ...ENV
-  })
-];
 let externals = { electron: 'electron' };
 builtinModules.forEach((e) => (externals[e] = e));
 packageCfg.dependencies && Object.keys(packageCfg.dependencies).forEach((e) => (externals[e] = e));
 
 /** @type {import('@rspack/core').Configuration} */
-export default (isDevelopment) => ({
+module.exports = (isDevelopment, envConfig) => ({
   mode: isDevelopment ? 'development' : 'production',
   target: 'node',
   entry: 'src/index.ts',
@@ -64,7 +58,11 @@ export default (isDevelopment) => ({
       }
     ]
   },
-  plugins,
+  plugins: [
+    new rspack.DefinePlugin({
+      ...envConfig
+    })
+  ],
   externalsType: 'commonjs',
   externals
 });
