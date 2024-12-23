@@ -33,7 +33,7 @@ async function startMain(envConfig) {
           manualRestart = true;
           process.kill(Mprocess.pid);
           Mprocess = null;
-          startElectron();
+          startApp();
           setTimeout(() => {
             manualRestart = false;
           }, 5000);

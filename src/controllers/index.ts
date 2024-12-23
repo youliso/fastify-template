@@ -1,8 +1,11 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
 import { Controller, RequestMapping } from '@/common/decorators';
 import { validationHandler } from '@/hooks';
-import { Success } from '@/common/restful';
+import { Error, Success } from '@/common/restful';
 import { test } from '@/servers';
+import { pipeline } from 'node:stream/promises';
+import { createWriteStream } from 'node:fs';
+import { join } from 'node:path';
 
 @Controller()
 export class Index {
@@ -85,5 +88,20 @@ export class Index {
   })
   async save(request: FastifyRequest, reply: FastifyReply) {
     reply.send(Success('ok'));
+  }
+
+  @RequestMapping({
+    method: 'POST',
+    attachValidation: true,
+    preHandler: [validationHandler]
+  })
+  async upload(req: FastifyRequest, reply: FastifyReply) {
+    const data = await req.file();
+    if (data) {
+      console.log(data);
+      reply.send(Success('ok'));
+    } else {
+      reply.send(Error('error'));
+    }
   }
 }

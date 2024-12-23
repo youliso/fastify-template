@@ -18,7 +18,7 @@ class App {
     return App.instance;
   }
 
-  constructor() {}
+  constructor() { }
 
   init() {
     this.fastify = Fastify({
@@ -79,8 +79,8 @@ class App {
 
   multipart() {
     if (!this.fastify) throw new Error('uninitialized fastify');
-    const limits = Cfg.get('multipart.limits') as { [key: string]: any };
-    this.fastify.register(Multipart, limits);
+    const multipartCfg = Cfg.get('app.multipart') as { [key: string]: any };
+    this.fastify.register(Multipart, multipartCfg);
     return this;
   }
 
