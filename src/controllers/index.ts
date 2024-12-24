@@ -6,6 +6,7 @@ import { test } from '@/servers';
 import { pipeline } from 'node:stream/promises';
 import { createWriteStream } from 'node:fs';
 import { join } from 'node:path';
+import { saveFile } from '@/servers/upload';
 
 @Controller()
 export class Index {
@@ -93,15 +94,31 @@ export class Index {
   @RequestMapping({
     method: 'POST',
     attachValidation: true,
-    preHandler: [validationHandler]
+    preHandler: [validationHandler],
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: {
+          type: {
+            type: 'string'
+          }
+        },
+        required: ['type']
+      }
+    },
   })
   async upload(req: FastifyRequest, reply: FastifyReply) {
+    const type = (req.query as any)['type'] as string;
     const data = await req.file();
     if (data) {
-      console.log(data);
-      reply.send(Success('ok'));
-    } else {
-      reply.send(Error('error'));
+      const url = await saveFile(type, data);
+      if (url) {
+        reply.send(Success('ok', {
+          url
+        }));
+        return;
+      }
     }
+    reply.send(Error('error'));
   }
 }

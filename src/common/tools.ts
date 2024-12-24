@@ -46,7 +46,7 @@ export function queryParams(data: any): string {
  * 深拷贝
  * @param obj
  */
- export function deepCopy<T>(obj: any): T {
+export function deepCopy<T>(obj: any): T {
   const isArray = Array.isArray(obj);
   let result: any = {};
   if (isArray) result = [];

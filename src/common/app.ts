@@ -4,7 +4,7 @@ import Cors from '@fastify/cors';
 import Multipart from '@fastify/multipart';
 import Static from '@fastify/static';
 import useController from '@/common/controller';
-import { stat } from '@/common/file';
+import { mkdirSync, statSync } from '@/common/file';
 import Cfg from '@/common/cfg';
 import { Error as RError } from '@/common/restful';
 
@@ -37,11 +37,13 @@ class App {
 
     //static
     const staticCfg = Cfg.get<{ root: string; prefix: string } & boolean>('app.static');
-    staticCfg &&
-      stat(staticCfg.root).then((is) => {
-        is && this.fastify!.register(Static, staticCfg);
-      });
-
+    if (staticCfg && staticCfg.root) {
+      let is = statSync(staticCfg.root);
+      if (is == 0) {
+        is = mkdirSync(staticCfg.root);
+      }
+      is && this.fastify!.register(Static, staticCfg);
+    }
     return this;
   }
 
@@ -79,7 +81,7 @@ class App {
 
   multipart() {
     if (!this.fastify) throw new Error('uninitialized fastify');
-    const multipartCfg = Cfg.get('app.multipart') as { [key: string]: any };
+    const multipartCfg = Cfg.get('app.multipart.opt') as { [key: string]: any };
     this.fastify.register(Multipart, multipartCfg);
     return this;
   }

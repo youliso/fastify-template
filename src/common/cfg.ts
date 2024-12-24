@@ -1,4 +1,5 @@
 import { readFile } from '@/common/file';
+import { join } from 'node:path';
 
 type Obj<Value> = {} & {
   [key: string]: Value | Obj<Value>;
@@ -22,17 +23,23 @@ export class Cfg {
       },
       logger: false,
       multipart: {
-        limits: {
-          fieldNameSize: 100, // Max field name size in bytes
-          fieldSize: 100,     // Max field value size in bytes
-          fields: 10,         // Max number of non-file fields
-          fileSize: 1024 * 1024 * 1024 * 10,   // For multipart forms, the max file size in bytes
-          files: 1,           // Max number of file fields
-          headerPairs: 2000,  // Max number of header key=>value pairs
-          parts: 1000         // For multipart forms, the max number of parts (fields + files)
+        path: join(__dirname, 'upload'),
+        opt: {
+          limits: {
+            fieldNameSize: 100, // Max field name size in bytes
+            fieldSize: 100,     // Max field value size in bytes
+            fields: 10,         // Max number of non-file fields
+            fileSize: 1024 * 1024 * 1024 * 10,   // For multipart forms, the max file size in bytes
+            files: 1,           // Max number of file fields
+            headerPairs: 2000,  // Max number of header key=>value pairs
+            parts: 1000         // For multipart forms, the max number of parts (fields + files)
+          }
         }
       },
-      static: false,
+      static: {
+        root: join(__dirname, 'upload'),
+        prefix: '/static/',
+      },
       socketIo: {
         path: '/io'
       }

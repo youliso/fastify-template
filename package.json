@@ -1,6 +1,6 @@
 {
   "name": "fastify-template",
-  "productName": "test",
+  "productName": "upload",
   "version": "1.0.0",
   "main": "app.js",
   "license": "MIT",

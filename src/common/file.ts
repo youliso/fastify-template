@@ -71,6 +71,14 @@ export function stat(path: string): Promise<0 | 1> {
     })
   );
 }
+export function statSync(path: string) {
+  try {
+    fs.statSync(path);
+    return 1;
+  } catch (error) {
+    return 0;
+  }
+}
 
 /**
  * 检查文件是否存在于当前目录中、以及是否可写
@@ -152,7 +160,7 @@ export function readLine(path: string, index?: number): Promise<string | any[]> 
  * @returns 0 失败 1成功
  */
 export async function mkdir(path: string, options?: MakeDirectoryOptions) {
-  return new Promise((resolve) => {
+  return new Promise<0 | 1>((resolve) => {
     fs.mkdir(path, options || { recursive: true }, (err) => {
       if (err) {
         resolve(0);
@@ -160,6 +168,15 @@ export async function mkdir(path: string, options?: MakeDirectoryOptions) {
       resolve(1);
     });
   });
+}
+
+export function mkdirSync(path: string, options?: MakeDirectoryOptions) {
+  try {
+    fs.mkdirSync(path, options || { recursive: true });
+    return 1;
+  } catch (error) {
+    return 0;
+  }
 }
 
 /**

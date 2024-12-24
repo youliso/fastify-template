@@ -4,3 +4,4 @@
 /out
 scripts/.env.json
 package-lock.json
+/upload
